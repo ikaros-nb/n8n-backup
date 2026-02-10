@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-10T08:02:38.200Z",
+  "updatedAt": "2026-02-10T08:04:00.673Z",
   "createdAt": "2025-11-27T06:18:20.131Z",
   "id": "QPSW2VyrRSeQ59Ly",
   "name": "Automated daily workflow backup to GitHub",
@@ -114,7 +114,7 @@
           "cachedResultName": "n8n-backup",
           "cachedResultUrl": "https://github.com/ikaros-nb/n8n-backup"
         },
-        "filePath": "={{ $('Retrieve workflows').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Retrieve workflows').item.json.tags[0]?.name ?? 'untagged' }}.json",
+        "filePath": "={{ $('Retrieve workflows').item.json.name.replace(/[\\s\\/]+/g, '-').toLowerCase() }}-{{ $('Retrieve workflows').item.json.tags[0]?.name ?? 'untagged' }}.json",
         "fileContent": "={{ $('To base64').item.json.data }}",
         "commitMessage": "=backup-{{ $('Commit date & file name').item.json.commitDate }}"
       },
@@ -176,7 +176,7 @@
             {
               "value1": "={{ $('Aggregate').item.json.name }}",
               "operation": "contains",
-              "value2": "={{ $('Retrieve workflows').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Retrieve workflows').item.json.tags[0]?.name ?? 'untagged' }}.json"
+              "value2": "={{ $('Retrieve workflows').item.json.name.replace(/[\\s\\/]+/g, '-').toLowerCase() }}-{{ $('Retrieve workflows').item.json.tags[0]?.name ?? 'untagged' }}.json"
             }
           ]
         }
@@ -408,7 +408,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "895f1a61-b5f1-449f-ba3a-428cab1a1054",
+  "versionId": "814f52fc-75e1-4651-9643-28a1400873cd",
   "activeVersionId": "994ffd29-d2db-4c4a-b7e5-c07fca5b664d",
   "triggerCount": 1,
   "shared": [
