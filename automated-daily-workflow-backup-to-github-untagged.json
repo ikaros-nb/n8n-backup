@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-10T08:00:49.940Z",
+  "updatedAt": "2026-02-10T08:02:38.200Z",
   "createdAt": "2025-11-27T06:18:20.131Z",
   "id": "QPSW2VyrRSeQ59Ly",
   "name": "Automated daily workflow backup to GitHub",
@@ -96,8 +96,7 @@
           "id": "BrhaC8w5nc0crgIB",
           "name": "GitHub account"
         }
-      },
-      "onError": "continueRegularOutput"
+      }
     },
     {
       "parameters": {
@@ -177,7 +176,7 @@
             {
               "value1": "={{ $('Aggregate').item.json.name }}",
               "operation": "contains",
-              "value2": "={{ $('Retrieve workflows').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Retrieve workflows').item.json.tags[0].name }}.json"
+              "value2": "={{ $('Retrieve workflows').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Retrieve workflows').item.json.tags[0]?.name ?? 'untagged' }}.json"
             }
           ]
         }
@@ -409,7 +408,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "b5267c86-eee8-4d9f-a2e5-07ac2747d863",
+  "versionId": "895f1a61-b5f1-449f-ba3a-428cab1a1054",
   "activeVersionId": "994ffd29-d2db-4c4a-b7e5-c07fca5b664d",
   "triggerCount": 1,
   "shared": [
