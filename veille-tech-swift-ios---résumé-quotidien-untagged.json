@@ -1,0 +1,853 @@
+{
+  "updatedAt": "2026-02-10T07:40:03.965Z",
+  "createdAt": "2026-01-29T04:57:12.988Z",
+  "id": "xl2AbAtl0tlnfvTW",
+  "name": "Veille Tech Swift/iOS - Résumé Quotidien",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 📝 Configuration requise\n\n### 1. Liste des Flux RSS\n- Modifie le node \"Liste des Flux RSS\"\n- Ajoute/supprime les URLs de flux RSS\n\n### 2. API Z.AI ✅ CONFIGURÉ\n- Va sur https://z.ai/manage-apikey/apikey-list\n- Crée une API Key\n- Dans n8n : Settings → Credentials → \"HTTP Header Auth\"\n- Nom : ZAI API Credentials\n- Header Name : Authorization\n- Header Value : Bearer TON_ZAI_API_KEY\n- Le workflow est déjà configuré pour utiliser le modèle glm-4.7\n\n### 3. Telegram Bot\n- Parle à @BotFather sur Telegram\n- Crée un bot : /newbot\n- Récupère le token\n- Dans n8n : Credentials → Telegram\n- Pour ton Chat ID : parle à ton bot puis va sur\n  https://api.telegram.org/bot<TOKEN>/getUpdates\n- Copie le chat_id et mets-le dans le node Telegram\n\n### 4. Test\n- Clique sur \"Execute Workflow\" pour tester\n- Une fois OK, clique sur \"Active\" pour automatiser",
+        "height": 704,
+        "width": 389,
+        "color": 4
+      },
+      "id": "9e0414f4-a08b-48eb-b808-0512109d5b7f",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2256,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## ⚙️ Personnalisation\n\n### Fréquence\n- Schedule : modifie pour ton timing préféré\n- Exemple : tous les jours à 8h, 2 fois par jour, etc.\n\n### Prompt IA\n- Modifie le system prompt dans \"AI Summarize\"\n- Adapte selon tes besoins (plus court, plus détaillé, focus technique, etc.)\n\n### Filtrage (optionnel)\n- Ajoute un node \"Filter\" après RSS Reader\n- Filtre par mots-clés : Swift, iOS, SwiftUI, etc.\n- Ou par date : articles des dernières 24h seulement",
+        "height": 464,
+        "width": 343,
+        "color": 5
+      },
+      "id": "ae5fd686-aa88-4e84-86ee-a1bd5877ab26",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2672,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Récupère le feed courant depuis le context de la boucle\nconst feedData = $('Loop Over Items').first().json;\nconst feedName = feedData.name || 'Source inconnue';\n\n// Filtre les articles des dernières 24h (ou 5 jours pour tests)\nconst now = new Date();\nconst cutoffDate = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24h\n// const cutoffDate = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000); // 5 jours (pour tests)\n\nconst recentArticles = $input.all()\n  .filter(item => {\n    const pubDate = new Date(item.json.pubDate || item.json.isoDate || 0);\n    return pubDate >= cutoffDate;\n  })\n  .map(item => ({\n    json: {\n      feedName,\n      title: item.json.title || 'Sans titre',\n      link: item.json.link || '',\n      pubDate: item.json.pubDate || item.json.isoDate || '',\n      content: (item.json.contentSnippet || item.json.content || item.json.description || '').substring(0, 500)\n    }\n  }));\n\n// Retourne un item vide si aucun article (pour continuer la boucle)\nif (recentArticles.length === 0) {\n  return [{ json: { _empty: true, feedName } }];\n}\n\nreturn recentArticles;"
+      },
+      "id": "065060b2-c6d0-4075-869d-ddc675dfa436",
+      "name": "Filtrer articles récents",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2832,
+        -512
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Agrège tous les articles de toutes les itérations\nconst allItems = $input.all();\n\nconst articles = allItems\n  .map(item => item.json)\n  .filter(article => !article._empty && article.title);\n\nif (articles.length === 0) {\n  return [{ json: { hasArticles: false, articles: [], articleCount: 0 } }];\n}\n\nreturn [{ json: { hasArticles: true, articles, articleCount: articles.length } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2832,
+        -704
+      ],
+      "id": "edb8290d-9043-49a8-ba63-0c35818a4a3c",
+      "name": "Agréger articles"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "0a4ca88a-7fcb-46ad-ab2f-19599a8e859d",
+              "leftValue": "={{ $json.hasArticles }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4004750a-ec91-448e-b960-bd7022417173",
+      "name": "Articles trouvés ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3056,
+        -704
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "id": "be2c1009-43ac-436d-9fe5-fa641b398bb6",
+      "name": "Telegram - Résumé",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        4128,
+        -816
+      ],
+      "webhookId": "501cba44-edb6-473c-bcf0-cfb7df26a7cd",
+      "credentials": {
+        "telegramApi": {
+          "id": "I5fyrVFVi31c1Y9u",
+          "name": "Telegram Swift News"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "📭 Veille Tech\n\nAucun nouvel article dans les dernières 24h.",
+        "additionalFields": {}
+      },
+      "id": "5f858d09-37bb-4660-baf3-42c797ccc231",
+      "name": "Telegram - Rien de neuf",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3280,
+        -592
+      ],
+      "webhookId": "bb807fc3-119d-4ea8-9ce0-f52a401e0829",
+      "credentials": {
+        "telegramApi": {
+          "id": "I5fyrVFVi31c1Y9u",
+          "name": "Telegram Swift News"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 📝 Configure tes flux RSS ici\nconst rssFeeds = [\n  { name: \"Swift by Sundell\", url: \"https://www.swiftbysundell.com/rss\" },\n  { name: \"Hacking with Swift\", url: \"https://www.hackingwithswift.com/articles/rss\" },\n  { name: \"iOS Dev Weekly\", url: \"https://iosdevweekly.com/issues.rss\" },\n  { name: \"Donny Wals\", url: \"https://www.donnywals.com/feed/\" },\n  { name: \"SwiftLee\", url: \"https://www.avanderlee.com/feed/\" }\n];\n\nreturn rssFeeds.map(feed => ({ json: feed }));"
+      },
+      "id": "68ddcf7b-448c-4b6d-8a68-805cdb8d380c",
+      "name": "Liste des flux RSS",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        -688
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "b75b499b-93cd-45da-86eb-576b8e258dfb",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2416,
+        -688
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "id": "4b99c655-52a6-4361-8a45-2a2a83e28901",
+      "name": "Lire RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        2624,
+        -512
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "d73761c7-12e1-4059-ada9-8a69bc3efed2",
+      "name": "Tous les jours à 8h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        1968,
+        -688
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const articles = $json.articles;\nconst articleCount = $json.articleCount;\n\n// Organise par source\nconst bySource = {};\narticles.forEach(article => {\n  const source = article.feedName || 'Autre';\n  if (!bySource[source]) bySource[source] = [];\n  bySource[source].push(article);\n});\n\nlet articlesText = '';\nfor (const [source, items] of Object.entries(bySource)) {\n  articlesText += `\\n## ${source}\\n`;\n  items.forEach((article, i) => {\n    articlesText += `\\n### ${i + 1}. ${article.title}\\nURL: ${article.link}\\nExtrait: ${article.content}...\\n`;\n  });\n}\n\nconst prompt = `### ROLE\nYou are a Senior iOS & Swift Architect specialized in tech intelligence. Your goal is to filter signal from noise and provide a high-value daily digest for developers.\n\n### CONTEXT\nTrigger: Daily 8:00 AM automated sync.\nInput Data: Recently published tech articles from various sources.\nArticles to process: \n${articlesText}\n\n### OBJECTIVE\nSummarize the provided articles while strictly adhering to the original language of each source (English, French, or Japanese). Group them by relevant technical categories.\n\n### CONSTRAINTS & FORMATTING RULES\n1. LANGUAGE: Summarize in French if the article is French, in English if English, and in Japanese if Japanese.\n2. NO MARKDOWN: Do NOT use any markdown formatting (no asterisks **, no underscores _, no headers #). Use only plain text and emojis.\n3. URL: Always include the article's URL at the end of its summary.\n4. SPACING: Leave one empty line between each article for readability.\n\n### RESPONSE STRUCTURE\n🔥 POINTS CLES\n(Provide 3 to 5 bullet points summarizing the most critical trends from all articles combined)\n\n📱 PAR CATEGORIE\n[Category Name - e.g., Swift, SwiftUI, iOS, Architecture, Testing, VisionPro...]\n\n- [Article Title]\n[2-3 sentence summary in the source's original language]\n🔗 [URL]\n\n- [Next Article Title]\n...\n\n### EXAMPLE OF SUMMARY LANGUAGE ADHERENCE\n- If source is EN: \"Apple released Swift 6.0 with new concurrency features...\"\n- If source is FR: \"Apple a publié Swift 6.0 avec de nouvelles fonctionnalités de concurrence...\"\n- If source is JP: \"Appleは、新しい並行処理機能を備えたSwift 6.0をリリースしました...\"`;\n\nreturn [{ json: { prompt, articleCount } }];"
+      },
+      "id": "9911902a-169e-4534-b9c1-ec3979a23a36",
+      "name": "Préparer prompt IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3280,
+        -816
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const summary = $json.text;\nconst articleCount = $('Préparer prompt IA').first().json.articleCount;\n\nconst today = new Date().toLocaleDateString('fr-FR', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\n// Nettoie le résumé (supprime markdown résiduel)\nconst cleanSummary = summary\n  .replace(/\\*\\*/g, '')  // Supprime **\n  .replace(/\\*/g, '')    // Supprime *\n  .replace(/_/g, '')     // Supprime _\n  .replace(/`/g, '');    // Supprime `\n\nconst message = `📰 Veille Tech - ${today}\\n\\n` +\n  `${articleCount} article(s) analysé(s)\\n\\n` +\n  `${cleanSummary}`;\n\nreturn [{ json: { message } }];"
+      },
+      "id": "0cc7ccdd-213f-407e-90d9-169663f9e1ae",
+      "name": "Formater message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3904,
+        -816
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        3552,
+        -816
+      ],
+      "id": "9fae393e-980a-4c52-993e-ad7e7c6ad447",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "glm-4.7-flash",
+          "mode": "id"
+        },
+        "responsesApiEnabled": false,
+        "options": {
+          "maxTokens": 2000,
+          "temperature": 0.7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        3552,
+        -608
+      ],
+      "id": "55fa4b24-d0fb-401a-b8bf-70333eea4bad",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "gvujnVxB5KB2KMti",
+          "name": "Z.AI API Key"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Filtrer articles récents": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agréger articles": {
+      "main": [
+        [
+          {
+            "node": "Articles trouvés ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Articles trouvés ?": {
+      "main": [
+        [
+          {
+            "node": "Préparer prompt IA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram - Rien de neuf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Liste des flux RSS": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Agréger articles",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Lire RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lire RSS": {
+      "main": [
+        [
+          {
+            "node": "Filtrer articles récents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tous les jours à 8h": {
+      "main": [
+        [
+          {
+            "node": "Liste des flux RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer prompt IA": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formater message": {
+      "main": [
+        [
+          {
+            "node": "Telegram - Résumé",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Formater message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Tous les jours à 8h": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "7511062a-6af3-482d-9c5a-d69f4840455b",
+  "activeVersionId": "7511062a-6af3-482d-9c5a-d69f4840455b",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-01-29T04:57:12.994Z",
+      "createdAt": "2026-01-29T04:57:12.994Z",
+      "role": "workflow:owner",
+      "workflowId": "xl2AbAtl0tlnfvTW",
+      "projectId": "WSxBDzriJIujErMI"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-02-10T07:44:41.000Z",
+    "createdAt": "2026-02-10T07:40:03.966Z",
+    "versionId": "7511062a-6af3-482d-9c5a-d69f4840455b",
+    "workflowId": "xl2AbAtl0tlnfvTW",
+    "nodes": [
+      {
+        "parameters": {
+          "content": "## 📝 Configuration requise\n\n### 1. Liste des Flux RSS\n- Modifie le node \"Liste des Flux RSS\"\n- Ajoute/supprime les URLs de flux RSS\n\n### 2. API Z.AI ✅ CONFIGURÉ\n- Va sur https://z.ai/manage-apikey/apikey-list\n- Crée une API Key\n- Dans n8n : Settings → Credentials → \"HTTP Header Auth\"\n- Nom : ZAI API Credentials\n- Header Name : Authorization\n- Header Value : Bearer TON_ZAI_API_KEY\n- Le workflow est déjà configuré pour utiliser le modèle glm-4.7\n\n### 3. Telegram Bot\n- Parle à @BotFather sur Telegram\n- Crée un bot : /newbot\n- Récupère le token\n- Dans n8n : Credentials → Telegram\n- Pour ton Chat ID : parle à ton bot puis va sur\n  https://api.telegram.org/bot<TOKEN>/getUpdates\n- Copie le chat_id et mets-le dans le node Telegram\n\n### 4. Test\n- Clique sur \"Execute Workflow\" pour tester\n- Une fois OK, clique sur \"Active\" pour automatiser",
+          "height": 704,
+          "width": 389,
+          "color": 4
+        },
+        "id": "9e0414f4-a08b-48eb-b808-0512109d5b7f",
+        "name": "Sticky Note",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          2256,
+          -272
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## ⚙️ Personnalisation\n\n### Fréquence\n- Schedule : modifie pour ton timing préféré\n- Exemple : tous les jours à 8h, 2 fois par jour, etc.\n\n### Prompt IA\n- Modifie le system prompt dans \"AI Summarize\"\n- Adapte selon tes besoins (plus court, plus détaillé, focus technique, etc.)\n\n### Filtrage (optionnel)\n- Ajoute un node \"Filter\" après RSS Reader\n- Filtre par mots-clés : Swift, iOS, SwiftUI, etc.\n- Ou par date : articles des dernières 24h seulement",
+          "height": 464,
+          "width": 343,
+          "color": 5
+        },
+        "id": "ae5fd686-aa88-4e84-86ee-a1bd5877ab26",
+        "name": "Sticky Note1",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          2672,
+          -272
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Récupère le feed courant depuis le context de la boucle\nconst feedData = $('Loop Over Items').first().json;\nconst feedName = feedData.name || 'Source inconnue';\n\n// Filtre les articles des dernières 24h (ou 5 jours pour tests)\nconst now = new Date();\nconst cutoffDate = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24h\n// const cutoffDate = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000); // 5 jours (pour tests)\n\nconst recentArticles = $input.all()\n  .filter(item => {\n    const pubDate = new Date(item.json.pubDate || item.json.isoDate || 0);\n    return pubDate >= cutoffDate;\n  })\n  .map(item => ({\n    json: {\n      feedName,\n      title: item.json.title || 'Sans titre',\n      link: item.json.link || '',\n      pubDate: item.json.pubDate || item.json.isoDate || '',\n      content: (item.json.contentSnippet || item.json.content || item.json.description || '').substring(0, 500)\n    }\n  }));\n\n// Retourne un item vide si aucun article (pour continuer la boucle)\nif (recentArticles.length === 0) {\n  return [{ json: { _empty: true, feedName } }];\n}\n\nreturn recentArticles;"
+        },
+        "id": "065060b2-c6d0-4075-869d-ddc675dfa436",
+        "name": "Filtrer articles récents",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2832,
+          -512
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Agrège tous les articles de toutes les itérations\nconst allItems = $input.all();\n\nconst articles = allItems\n  .map(item => item.json)\n  .filter(article => !article._empty && article.title);\n\nif (articles.length === 0) {\n  return [{ json: { hasArticles: false, articles: [], articleCount: 0 } }];\n}\n\nreturn [{ json: { hasArticles: true, articles, articleCount: articles.length } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2832,
+          -704
+        ],
+        "id": "edb8290d-9043-49a8-ba63-0c35818a4a3c",
+        "name": "Agréger articles"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "0a4ca88a-7fcb-46ad-ab2f-19599a8e859d",
+                "leftValue": "={{ $json.hasArticles }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "4004750a-ec91-448e-b960-bd7022417173",
+        "name": "Articles trouvés ?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          3056,
+          -704
+        ]
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+          "text": "={{ $json.message }}",
+          "additionalFields": {}
+        },
+        "id": "be2c1009-43ac-436d-9fe5-fa641b398bb6",
+        "name": "Telegram - Résumé",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          4128,
+          -816
+        ],
+        "webhookId": "501cba44-edb6-473c-bcf0-cfb7df26a7cd",
+        "credentials": {
+          "telegramApi": {
+            "id": "I5fyrVFVi31c1Y9u",
+            "name": "Telegram Swift News"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+          "text": "📭 Veille Tech\n\nAucun nouvel article dans les dernières 24h.",
+          "additionalFields": {}
+        },
+        "id": "5f858d09-37bb-4660-baf3-42c797ccc231",
+        "name": "Telegram - Rien de neuf",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          3280,
+          -592
+        ],
+        "webhookId": "bb807fc3-119d-4ea8-9ce0-f52a401e0829",
+        "credentials": {
+          "telegramApi": {
+            "id": "I5fyrVFVi31c1Y9u",
+            "name": "Telegram Swift News"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// 📝 Configure tes flux RSS ici\nconst rssFeeds = [\n  { name: \"Swift by Sundell\", url: \"https://www.swiftbysundell.com/rss\" },\n  { name: \"Hacking with Swift\", url: \"https://www.hackingwithswift.com/articles/rss\" },\n  { name: \"iOS Dev Weekly\", url: \"https://iosdevweekly.com/issues.rss\" },\n  { name: \"Donny Wals\", url: \"https://www.donnywals.com/feed/\" },\n  { name: \"SwiftLee\", url: \"https://www.avanderlee.com/feed/\" }\n];\n\nreturn rssFeeds.map(feed => ({ json: feed }));"
+        },
+        "id": "68ddcf7b-448c-4b6d-8a68-805cdb8d380c",
+        "name": "Liste des flux RSS",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2192,
+          -688
+        ]
+      },
+      {
+        "parameters": {
+          "options": {
+            "reset": false
+          }
+        },
+        "id": "b75b499b-93cd-45da-86eb-576b8e258dfb",
+        "name": "Loop Over Items",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          2416,
+          -688
+        ]
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.url }}",
+          "options": {}
+        },
+        "id": "4b99c655-52a6-4361-8a45-2a2a83e28901",
+        "name": "Lire RSS",
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.1,
+        "position": [
+          2624,
+          -512
+        ]
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8
+              }
+            ]
+          }
+        },
+        "id": "d73761c7-12e1-4059-ada9-8a69bc3efed2",
+        "name": "Tous les jours à 8h",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          1968,
+          -688
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const articles = $json.articles;\nconst articleCount = $json.articleCount;\n\n// Organise par source\nconst bySource = {};\narticles.forEach(article => {\n  const source = article.feedName || 'Autre';\n  if (!bySource[source]) bySource[source] = [];\n  bySource[source].push(article);\n});\n\nlet articlesText = '';\nfor (const [source, items] of Object.entries(bySource)) {\n  articlesText += `\\n## ${source}\\n`;\n  items.forEach((article, i) => {\n    articlesText += `\\n### ${i + 1}. ${article.title}\\nURL: ${article.link}\\nExtrait: ${article.content}...\\n`;\n  });\n}\n\nconst prompt = `### ROLE\nYou are a Senior iOS & Swift Architect specialized in tech intelligence. Your goal is to filter signal from noise and provide a high-value daily digest for developers.\n\n### CONTEXT\nTrigger: Daily 8:00 AM automated sync.\nInput Data: Recently published tech articles from various sources.\nArticles to process: \n${articlesText}\n\n### OBJECTIVE\nSummarize the provided articles while strictly adhering to the original language of each source (English, French, or Japanese). Group them by relevant technical categories.\n\n### CONSTRAINTS & FORMATTING RULES\n1. LANGUAGE: Summarize in French if the article is French, in English if English, and in Japanese if Japanese.\n2. NO MARKDOWN: Do NOT use any markdown formatting (no asterisks **, no underscores _, no headers #). Use only plain text and emojis.\n3. URL: Always include the article's URL at the end of its summary.\n4. SPACING: Leave one empty line between each article for readability.\n\n### RESPONSE STRUCTURE\n🔥 POINTS CLES\n(Provide 3 to 5 bullet points summarizing the most critical trends from all articles combined)\n\n📱 PAR CATEGORIE\n[Category Name - e.g., Swift, SwiftUI, iOS, Architecture, Testing, VisionPro...]\n\n- [Article Title]\n[2-3 sentence summary in the source's original language]\n🔗 [URL]\n\n- [Next Article Title]\n...\n\n### EXAMPLE OF SUMMARY LANGUAGE ADHERENCE\n- If source is EN: \"Apple released Swift 6.0 with new concurrency features...\"\n- If source is FR: \"Apple a publié Swift 6.0 avec de nouvelles fonctionnalités de concurrence...\"\n- If source is JP: \"Appleは、新しい並行処理機能を備えたSwift 6.0をリリースしました...\"`;\n\nreturn [{ json: { prompt, articleCount } }];"
+        },
+        "id": "9911902a-169e-4534-b9c1-ec3979a23a36",
+        "name": "Préparer prompt IA",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3280,
+          -816
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const summary = $json.text;\nconst articleCount = $('Préparer prompt IA').first().json.articleCount;\n\nconst today = new Date().toLocaleDateString('fr-FR', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\n// Nettoie le résumé (supprime markdown résiduel)\nconst cleanSummary = summary\n  .replace(/\\*\\*/g, '')  // Supprime **\n  .replace(/\\*/g, '')    // Supprime *\n  .replace(/_/g, '')     // Supprime _\n  .replace(/`/g, '');    // Supprime `\n\nconst message = `📰 Veille Tech - ${today}\\n\\n` +\n  `${articleCount} article(s) analysé(s)\\n\\n` +\n  `${cleanSummary}`;\n\nreturn [{ json: { message } }];"
+        },
+        "id": "0cc7ccdd-213f-407e-90d9-169663f9e1ae",
+        "name": "Formater message",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3904,
+          -816
+        ]
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.prompt }}",
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.7,
+        "position": [
+          3552,
+          -816
+        ],
+        "id": "9fae393e-980a-4c52-993e-ad7e7c6ad447",
+        "name": "Basic LLM Chain"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "glm-4.7-flash",
+            "mode": "id"
+          },
+          "responsesApiEnabled": false,
+          "options": {
+            "maxTokens": 2000,
+            "temperature": 0.7
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.3,
+        "position": [
+          3552,
+          -608
+        ],
+        "id": "55fa4b24-d0fb-401a-b8bf-70333eea4bad",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "gvujnVxB5KB2KMti",
+            "name": "Z.AI API Key"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Filtrer articles récents": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Agréger articles": {
+        "main": [
+          [
+            {
+              "node": "Articles trouvés ?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Articles trouvés ?": {
+        "main": [
+          [
+            {
+              "node": "Préparer prompt IA",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Telegram - Rien de neuf",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Liste des flux RSS": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Agréger articles",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Lire RSS",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Lire RSS": {
+        "main": [
+          [
+            {
+              "node": "Filtrer articles récents",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tous les jours à 8h": {
+        "main": [
+          [
+            {
+              "node": "Liste des flux RSS",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Préparer prompt IA": {
+        "main": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Formater message": {
+        "main": [
+          [
+            {
+              "node": "Telegram - Résumé",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Basic LLM Chain": {
+        "main": [
+          [
+            {
+              "node": "Formater message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicolas Bouème",
+    "name": "Version 7511062a",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
