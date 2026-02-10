@@ -1,0 +1,811 @@
+{
+  "updatedAt": "2026-02-10T07:33:55.761Z",
+  "createdAt": "2026-02-09T08:09:43.215Z",
+  "id": "6y54DR1GjXbiJFFq",
+  "name": "Veille Swift Evolution - Concurrency",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const feedName = $('Loop Over Items').first().json.name;\nconst items = $input.all();\n\nif (items.length === 0) {\n  return [{ json: { _empty: true, feedName } }];\n}\n\nreturn items.map(item => ({\n  json: { ...item.json, feedName }\n}));"
+      },
+      "id": "0e1ad024-0761-4d2c-ad4d-ab4cfbdc4c37",
+      "name": "Enrichir feedName",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const allItems = $input.all();\nconst now = new Date();\nconst windowMs = 26 * 60 * 60 * 1000;\nconst cutoff = new Date(now.getTime() - windowMs);\n\nconst seen = new Set();\nconst articles = [];\n\nfor (const item of allItems) {\n  if (item.json._empty) continue;\n\n  const pubDate = new Date(item.json.pubDate || item.json.updated || item.json.isoDate);\n  if (pubDate < cutoff) continue;\n\n  const link = item.json.link || '';\n  if (!link || seen.has(link)) continue;\n  seen.add(link);\n\n  articles.push({\n    title: item.json.title || '',\n    link,\n    content: (item.json.contentSnippet || item.json.content || item.json.description || '').substring(0, 500),\n    pubDate: item.json.pubDate || item.json.updated || item.json.isoDate || '',\n    feedName: item.json.feedName || 'Unknown'\n  });\n}\n\nconst limited = articles.slice(0, 15);\n\nreturn [{\n  json: {\n    articles: limited,\n    articleCount: limited.length\n  }\n}];"
+      },
+      "id": "a9231092-c7ff-4045-96ea-2c4a08d5ef95",
+      "name": "Filtrer et dedup",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "30 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "581bf37c-4a5d-476d-9d04-b4e92735b250",
+      "name": "Tous les jours 8h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -64,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-articles",
+              "leftValue": "={{ $json.articleCount }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "be44e547-d53d-4487-aa53-1a4556c8e433",
+      "name": "Articles trouves ?1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        832,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "condition-relevant",
+              "leftValue": "={{ $json.isRelevant }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d5f3f555-3f4b-43eb-9c84-24e0d8516ceb",
+      "name": "Contenu pertinent ?1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $json.text || $json.response || $json.output || '';\nconst articleCount = $('Preparer prompt IA').first().json.articleCount;\nconst isRelevant = !response.trim().startsWith('AUCUN');\n\nif (!isRelevant) {\n  return [{ json: { message: '', isRelevant: false } }];\n}\n\nconst today = new Date().toLocaleDateString('fr-FR', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\nconst cleanResponse = response\n  .replace(/\\*\\*/g, '')\n  .replace(/\\*/g, '')\n  .replace(/_/g, '')\n  .replace(/`/g, '')\n  .replace(/#{1,6}\\s/g, '');\n\nlet message = `\\u26A1 Swift Evolution - ${today}\\n\\n` +\n  `${articleCount} source(s) analysee(s)\\n\\n` +\n  `${cleanResponse}`;\n\nif (message.length > 4000) {\n  message = message.substring(0, 4000) + '\\n\\n... (tronque)';\n}\n\nreturn [{ json: { message, isRelevant: true } }];"
+      },
+      "id": "cea5438e-b8df-4c03-adc5-1d4e0865f58d",
+      "name": "Formater message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1632,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "id": "1dafca6b-2c7a-407f-b747-28ddd2dd86b1",
+      "name": "Telegram - Digest",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2080,
+        208
+      ],
+      "webhookId": "c4ddd3be-fd44-4b2b-ac29-da8d00c701b2",
+      "credentials": {
+        "telegramApi": {
+          "id": "I5fyrVFVi31c1Y9u",
+          "name": "Telegram Swift News"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const articles = $json.articles;\nconst articleCount = $json.articleCount;\n\nlet articlesText = '';\narticles.forEach((article, i) => {\n  articlesText += `\\n${i + 1}. [${article.feedName}] ${article.title}\\nURL: ${article.link}\\nExtrait: ${article.content}\\n`;\n});\n\nconst prompt = `### CONTEXT\nYou are a Senior Swift Architect specialized in tech intelligence and the Swift 6 migration (Strict Concurrency). You are processing a feed of technical articles and Swift Evolution discussions.\n\n### OBJECTIVE\nFilter, analyze, and summarize the provided articles.\nTarget content: Swift 6 migration, Strict Concurrency, Sendability, Actor isolation, and Swift Evolution Proposals (SE-xxxx).\n\nINPUT DATA:\n${articlesText}\n\n### STYLE & TONE\nTechnical, concise, and professional. Use senior-level terminology. Do NOT translate Swift keywords (e.g., keep \"Sendable\", \"Data race\", \"MainActor\", \"Task Group\").\n\n### AUDIENCE\niOS Developers migrating from Swift 5 to Swift 6.\n\n### RESPONSE RULES & FORMATTING\n1. LANGUAGE: Summarize in the original language of the source (French if source is FR, English if EN, Japanese if JP).\n2. NO MARKDOWN: Do not use **, #, or _. Use plain text and emojis only.\n3. SPACING: Add a double line break between each article for human readability.\n4. RELEVANCE: If no article matches the topics, reply only with: AUCUN.\n5. SWIFT PROPOSALS: If an article discusses a specific proposal, prefix the title with [SE-XXXX].\n\n### RESPONSE STRUCTURE PER ARTICLE\n📦 [CATEGORY NAME]\n\nTitle: [SE-XXXX if applicable] [Original Title]\nSummary: [2-3 dense technical sentences in the source's language]\nAction: [Practical step for a developer during migration]\nSwift Version: [6.0 / 6.1 / 6.2 / Future]\nLink: [URL]\n\n---\n\n### TOPICS TO FILTER (STRICT)\n- Strict Concurrency, Sendable, @Sendable, sending (SE-0430).\n- Actor isolation, Global Actors, MainActor, SE-0466, SE-0461.\n- Region-based isolation (SE-0414), Data race safety.\n- Task, TaskGroup, Custom Executors, Mutex (SE-0433).\n- Ownership, ~Copyable, Typed throws (SE-0413), Swift Testing.\n- Any Swift Evolution Proposal (SE-xxxx).`;\n\nreturn [{ json: { prompt, articleCount } }];"
+      },
+      "id": "31429d1d-f0b4-4c0b-8a54-b6c9ce23d47d",
+      "name": "Preparer prompt IA",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "id": "a4a8cec9-a165-4133-8064-c7cb16b6258d",
+      "name": "Lire RSS",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        608,
+        400
+      ],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "16ce6722-9508-429b-b106-bfc09cfc26b8",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        384,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const feeds = [\n  { url: 'https://forums.swift.org/c/evolution/18.rss', name: 'Swift Forums - Evolution' },\n  { url: 'https://forums.swift.org/tag/concurrency.rss', name: 'Swift Forums - Concurrency' },\n  { url: 'https://forums.swift.org/c/evolution/proposal-reviews/21.rss', name: 'Swift Forums - Proposal Reviews' },\n  { url: 'https://github.com/swiftlang/swift-evolution/commits/main.atom', name: 'GitHub Swift Evolution' },\n  { url: 'https://www.swift.org/atom.xml', name: 'Swift.org Blog' }\n];\n\nreturn feeds.map(f => ({ json: f }));"
+      },
+      "id": "6be07d89-8d60-4093-bd45-42bb44b7e27c",
+      "name": "Liste des flux RSS",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}"
+      },
+      "id": "12cc214e-4696-4595-8f06-bf25adb632e2",
+      "name": "Basic LLM Chain",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.4,
+      "position": [
+        1280,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "glm-4.7-flash",
+          "mode": "id"
+        },
+        "options": {
+          "maxTokens": 4000,
+          "temperature": 0.3
+        }
+      },
+      "id": "1482ebb4-6644-4ba7-80cd-bca70012dcd1",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1360,
+        432
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "gvujnVxB5KB2KMti",
+          "name": "Z.AI API Key"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Enrichir feedName": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrer et dedup": {
+      "main": [
+        [
+          {
+            "node": "Articles trouves ?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tous les jours 8h": {
+      "main": [
+        [
+          {
+            "node": "Liste des flux RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Articles trouves ?1": {
+      "main": [
+        [
+          {
+            "node": "Preparer prompt IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contenu pertinent ?1": {
+      "main": [
+        [
+          {
+            "node": "Telegram - Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formater message": {
+      "main": [
+        [
+          {
+            "node": "Contenu pertinent ?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparer prompt IA": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lire RSS": {
+      "main": [
+        [
+          {
+            "node": "Enrichir feedName",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Filtrer et dedup",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Lire RSS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Liste des flux RSS": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Formater message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Tous les jours 8h": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "5f8eb0bb-1a93-4f00-8bbe-e4f077829656",
+  "activeVersionId": "5f8eb0bb-1a93-4f00-8bbe-e4f077829656",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-02-09T08:09:43.220Z",
+      "createdAt": "2026-02-09T08:09:43.220Z",
+      "role": "workflow:owner",
+      "workflowId": "6y54DR1GjXbiJFFq",
+      "projectId": "WSxBDzriJIujErMI"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-02-10T07:39:42.000Z",
+    "createdAt": "2026-02-10T07:32:13.174Z",
+    "versionId": "5f8eb0bb-1a93-4f00-8bbe-e4f077829656",
+    "workflowId": "6y54DR1GjXbiJFFq",
+    "nodes": [
+      {
+        "parameters": {
+          "jsCode": "const feedName = $('Loop Over Items').first().json.name;\nconst items = $input.all();\n\nif (items.length === 0) {\n  return [{ json: { _empty: true, feedName } }];\n}\n\nreturn items.map(item => ({\n  json: { ...item.json, feedName }\n}));"
+        },
+        "id": "0e1ad024-0761-4d2c-ad4d-ab4cfbdc4c37",
+        "name": "Enrichir feedName",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          832,
+          480
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const allItems = $input.all();\nconst now = new Date();\nconst windowMs = 26 * 60 * 60 * 1000;\nconst cutoff = new Date(now.getTime() - windowMs);\n\nconst seen = new Set();\nconst articles = [];\n\nfor (const item of allItems) {\n  if (item.json._empty) continue;\n\n  const pubDate = new Date(item.json.pubDate || item.json.updated || item.json.isoDate);\n  if (pubDate < cutoff) continue;\n\n  const link = item.json.link || '';\n  if (!link || seen.has(link)) continue;\n  seen.add(link);\n\n  articles.push({\n    title: item.json.title || '',\n    link,\n    content: (item.json.contentSnippet || item.json.content || item.json.description || '').substring(0, 500),\n    pubDate: item.json.pubDate || item.json.updated || item.json.isoDate || '',\n    feedName: item.json.feedName || 'Unknown'\n  });\n}\n\nconst limited = articles.slice(0, 15);\n\nreturn [{\n  json: {\n    articles: limited,\n    articleCount: limited.length\n  }\n}];"
+        },
+        "id": "a9231092-c7ff-4045-96ea-2c4a08d5ef95",
+        "name": "Filtrer et dedup",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          608,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "30 8 * * *"
+              }
+            ]
+          }
+        },
+        "id": "581bf37c-4a5d-476d-9d04-b4e92735b250",
+        "name": "Tous les jours 8h",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          -64,
+          400
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "condition-articles",
+                "leftValue": "={{ $json.articleCount }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "be44e547-d53d-4487-aa53-1a4556c8e433",
+        "name": "Articles trouves ?1",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          832,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "condition-relevant",
+                "leftValue": "={{ $json.isRelevant }}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "d5f3f555-3f4b-43eb-9c84-24e0d8516ceb",
+        "name": "Contenu pertinent ?1",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          1856,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const response = $json.text || $json.response || $json.output || '';\nconst articleCount = $('Preparer prompt IA').first().json.articleCount;\nconst isRelevant = !response.trim().startsWith('AUCUN');\n\nif (!isRelevant) {\n  return [{ json: { message: '', isRelevant: false } }];\n}\n\nconst today = new Date().toLocaleDateString('fr-FR', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\nconst cleanResponse = response\n  .replace(/\\*\\*/g, '')\n  .replace(/\\*/g, '')\n  .replace(/_/g, '')\n  .replace(/`/g, '')\n  .replace(/#{1,6}\\s/g, '');\n\nlet message = `\\u26A1 Swift Evolution - ${today}\\n\\n` +\n  `${articleCount} source(s) analysee(s)\\n\\n` +\n  `${cleanResponse}`;\n\nif (message.length > 4000) {\n  message = message.substring(0, 4000) + '\\n\\n... (tronque)';\n}\n\nreturn [{ json: { message, isRelevant: true } }];"
+        },
+        "id": "cea5438e-b8df-4c03-adc5-1d4e0865f58d",
+        "name": "Formater message",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1632,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+          "text": "={{ $json.message }}",
+          "additionalFields": {}
+        },
+        "id": "1dafca6b-2c7a-407f-b747-28ddd2dd86b1",
+        "name": "Telegram - Digest",
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          2080,
+          208
+        ],
+        "webhookId": "c4ddd3be-fd44-4b2b-ac29-da8d00c701b2",
+        "credentials": {
+          "telegramApi": {
+            "id": "I5fyrVFVi31c1Y9u",
+            "name": "Telegram Swift News"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const articles = $json.articles;\nconst articleCount = $json.articleCount;\n\nlet articlesText = '';\narticles.forEach((article, i) => {\n  articlesText += `\\n${i + 1}. [${article.feedName}] ${article.title}\\nURL: ${article.link}\\nExtrait: ${article.content}\\n`;\n});\n\nconst prompt = `### CONTEXT\nYou are a Senior Swift Architect specialized in tech intelligence and the Swift 6 migration (Strict Concurrency). You are processing a feed of technical articles and Swift Evolution discussions.\n\n### OBJECTIVE\nFilter, analyze, and summarize the provided articles.\nTarget content: Swift 6 migration, Strict Concurrency, Sendability, Actor isolation, and Swift Evolution Proposals (SE-xxxx).\n\nINPUT DATA:\n${articlesText}\n\n### STYLE & TONE\nTechnical, concise, and professional. Use senior-level terminology. Do NOT translate Swift keywords (e.g., keep \"Sendable\", \"Data race\", \"MainActor\", \"Task Group\").\n\n### AUDIENCE\niOS Developers migrating from Swift 5 to Swift 6.\n\n### RESPONSE RULES & FORMATTING\n1. LANGUAGE: Summarize in the original language of the source (French if source is FR, English if EN, Japanese if JP).\n2. NO MARKDOWN: Do not use **, #, or _. Use plain text and emojis only.\n3. SPACING: Add a double line break between each article for human readability.\n4. RELEVANCE: If no article matches the topics, reply only with: AUCUN.\n5. SWIFT PROPOSALS: If an article discusses a specific proposal, prefix the title with [SE-XXXX].\n\n### RESPONSE STRUCTURE PER ARTICLE\n📦 [CATEGORY NAME]\n\nTitle: [SE-XXXX if applicable] [Original Title]\nSummary: [2-3 dense technical sentences in the source's language]\nAction: [Practical step for a developer during migration]\nSwift Version: [6.0 / 6.1 / 6.2 / Future]\nLink: [URL]\n\n---\n\n### TOPICS TO FILTER (STRICT)\n- Strict Concurrency, Sendable, @Sendable, sending (SE-0430).\n- Actor isolation, Global Actors, MainActor, SE-0466, SE-0461.\n- Region-based isolation (SE-0414), Data race safety.\n- Task, TaskGroup, Custom Executors, Mutex (SE-0433).\n- Ownership, ~Copyable, Typed throws (SE-0413), Swift Testing.\n- Any Swift Evolution Proposal (SE-xxxx).`;\n\nreturn [{ json: { prompt, articleCount } }];"
+        },
+        "id": "31429d1d-f0b4-4c0b-8a54-b6c9ce23d47d",
+        "name": "Preparer prompt IA",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1056,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.url }}",
+          "options": {}
+        },
+        "id": "a4a8cec9-a165-4133-8064-c7cb16b6258d",
+        "name": "Lire RSS",
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1,
+        "position": [
+          608,
+          400
+        ],
+        "continueOnFail": true
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "16ce6722-9508-429b-b106-bfc09cfc26b8",
+        "name": "Loop Over Items",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          384,
+          400
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const feeds = [\n  { url: 'https://forums.swift.org/c/evolution/18.rss', name: 'Swift Forums - Evolution' },\n  { url: 'https://forums.swift.org/tag/concurrency.rss', name: 'Swift Forums - Concurrency' },\n  { url: 'https://forums.swift.org/c/evolution/proposal-reviews/21.rss', name: 'Swift Forums - Proposal Reviews' },\n  { url: 'https://github.com/swiftlang/swift-evolution/commits/main.atom', name: 'GitHub Swift Evolution' },\n  { url: 'https://www.swift.org/atom.xml', name: 'Swift.org Blog' }\n];\n\nreturn feeds.map(f => ({ json: f }));"
+        },
+        "id": "6be07d89-8d60-4093-bd45-42bb44b7e27c",
+        "name": "Liste des flux RSS",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          160,
+          400
+        ]
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.prompt }}"
+        },
+        "id": "12cc214e-4696-4595-8f06-bf25adb632e2",
+        "name": "Basic LLM Chain",
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.4,
+        "position": [
+          1280,
+          208
+        ]
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "glm-4.7-flash",
+            "mode": "id"
+          },
+          "options": {
+            "maxTokens": 4000,
+            "temperature": 0.3
+          }
+        },
+        "id": "1482ebb4-6644-4ba7-80cd-bca70012dcd1",
+        "name": "OpenAI Chat Model",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          1360,
+          432
+        ],
+        "credentials": {
+          "openAiApi": {
+            "id": "gvujnVxB5KB2KMti",
+            "name": "Z.AI API Key"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Enrichir feedName": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filtrer et dedup": {
+        "main": [
+          [
+            {
+              "node": "Articles trouves ?1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tous les jours 8h": {
+        "main": [
+          [
+            {
+              "node": "Liste des flux RSS",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Articles trouves ?1": {
+        "main": [
+          [
+            {
+              "node": "Preparer prompt IA",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Contenu pertinent ?1": {
+        "main": [
+          [
+            {
+              "node": "Telegram - Digest",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Formater message": {
+        "main": [
+          [
+            {
+              "node": "Contenu pertinent ?1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Preparer prompt IA": {
+        "main": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Lire RSS": {
+        "main": [
+          [
+            {
+              "node": "Enrichir feedName",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Filtrer et dedup",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Lire RSS",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Liste des flux RSS": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Basic LLM Chain": {
+        "main": [
+          [
+            {
+              "node": "Formater message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Nicolas Bouème",
+    "name": "Version 5f8eb0bb",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
