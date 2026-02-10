@@ -1,0 +1,438 @@
+{
+  "updatedAt": "2026-02-10T07:45:02.387Z",
+  "createdAt": "2025-11-27T05:54:56.840Z",
+  "id": "JsXkXXD808mS6NVM",
+  "name": "Email received",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 1
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "70a332d4-cd8a-4058-a282-5e1d4322181b",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CZHyJwjgAh19A92R",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.From }}",
+                    "rightValue": "ne-pas-repondre@dgfip.finances.gouv.fr",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "5696a88e-f335-4a7a-b794-d2daf53ce034"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Communisme"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6b679a6d-8014-4aa7-b562-15c2892492d3",
+                    "leftValue": "={{ $json.From }}",
+                    "rightValue": "Raptor",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9a801bc8-8bee-447f-87c5-4cfc3e5bd6c1",
+                    "leftValue": "={{ $json.From }}",
+                    "rightValue": "money",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Test"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d0a841a6-ca07-48bd-86bb-f556d5ac43b7",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "=Vous avez reçu un message\n\n*Expéditeur* {{ $json.From }}\n\n*Sujet* {{ $json.Subject }}\n\n*Contenu* {{ $json.snippet }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        -112
+      ],
+      "id": "29b7e810-2f13-4bb5-ac55-836ec1a733b7",
+      "name": "Send a text message",
+      "webhookId": "0e46c24f-33ea-4ec9-a635-18e470071221",
+      "credentials": {
+        "telegramApi": {
+          "id": "GkSR4oadRNc4I5GI",
+          "name": "Telegram Le Messager"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "=Tu as un message du Raptor !\n\nArrête de cucker et fonce.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        80
+      ],
+      "id": "99a4f5a6-fe23-4f17-ba09-5df3c2fc0f84",
+      "name": "Vite ma gourde",
+      "webhookId": "0e46c24f-33ea-4ec9-a635-18e470071221",
+      "credentials": {
+        "telegramApi": {
+          "id": "GkSR4oadRNc4I5GI",
+          "name": "Telegram Le Messager"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Vite ma gourde",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Gmail Trigger": {
+      "Gmail Trigger": {
+        "lastTimeChecked": 1770701971,
+        "possibleDuplicates": [
+          "19c460fe4c0300ab",
+          "19c4609e6374a2ad",
+          "19c45fbac104020f",
+          "19c45fb71ab02c74",
+          "19c45fb653fea5d4",
+          "19c45fb642bc3a4e",
+          "19c45ec30deb1414"
+        ]
+      }
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "14dba2f5-ac82-4c45-b764-b196ca959505",
+  "activeVersionId": "14dba2f5-ac82-4c45-b764-b196ca959505",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-11-27T05:54:56.845Z",
+      "createdAt": "2025-11-27T05:54:56.845Z",
+      "role": "workflow:owner",
+      "workflowId": "JsXkXXD808mS6NVM",
+      "projectId": "WSxBDzriJIujErMI"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-02-10T07:45:04.000Z",
+    "createdAt": "2026-02-10T07:45:02.388Z",
+    "versionId": "14dba2f5-ac82-4c45-b764-b196ca959505",
+    "workflowId": "JsXkXXD808mS6NVM",
+    "nodes": [
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyX",
+                "value": 1
+              }
+            ]
+          },
+          "filters": {}
+        },
+        "type": "n8n-nodes-base.gmailTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          0,
+          0
+        ],
+        "id": "70a332d4-cd8a-4058-a282-5e1d4322181b",
+        "name": "Gmail Trigger",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "CZHyJwjgAh19A92R",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.From }}",
+                      "rightValue": "ne-pas-repondre@dgfip.finances.gouv.fr",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      },
+                      "id": "5696a88e-f335-4a7a-b794-d2daf53ce034"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Communisme"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "6b679a6d-8014-4aa7-b562-15c2892492d3",
+                      "leftValue": "={{ $json.From }}",
+                      "rightValue": "Raptor",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "9a801bc8-8bee-447f-87c5-4cfc3e5bd6c1",
+                      "leftValue": "={{ $json.From }}",
+                      "rightValue": "money",
+                      "operator": {
+                        "type": "string",
+                        "operation": "contains"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Test"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.3,
+        "position": [
+          208,
+          0
+        ],
+        "id": "d0a841a6-ca07-48bd-86bb-f556d5ac43b7",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+          "text": "=Vous avez reçu un message\n\n*Expéditeur* {{ $json.From }}\n\n*Sujet* {{ $json.Subject }}\n\n*Contenu* {{ $json.snippet }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          560,
+          -112
+        ],
+        "id": "29b7e810-2f13-4bb5-ac55-836ec1a733b7",
+        "name": "Send a text message",
+        "webhookId": "0e46c24f-33ea-4ec9-a635-18e470071221",
+        "credentials": {
+          "telegramApi": {
+            "id": "GkSR4oadRNc4I5GI",
+            "name": "Telegram Le Messager"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+          "text": "=Tu as un message du Raptor !\n\nArrête de cucker et fonce.",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          560,
+          80
+        ],
+        "id": "99a4f5a6-fe23-4f17-ba09-5df3c2fc0f84",
+        "name": "Vite ma gourde",
+        "webhookId": "0e46c24f-33ea-4ec9-a635-18e470071221",
+        "credentials": {
+          "telegramApi": {
+            "id": "GkSR4oadRNc4I5GI",
+            "name": "Telegram Le Messager"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Gmail Trigger": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Vite ma gourde",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      }
+    },
+    "authors": "Nicolas Bouème",
+    "name": "Version 14dba2f5",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
