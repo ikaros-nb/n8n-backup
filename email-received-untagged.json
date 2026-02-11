@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-10T07:45:02.387Z",
+  "updatedAt": "2026-02-11T00:31:18.028Z",
   "createdAt": "2025-11-27T05:54:56.840Z",
   "id": "JsXkXXD808mS6NVM",
   "name": "Email received",
@@ -81,31 +81,9 @@
                   }
                 ],
                 "combinator": "and"
-              }
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 2
-                },
-                "conditions": [
-                  {
-                    "id": "9a801bc8-8bee-447f-87c5-4cfc3e5bd6c1",
-                    "leftValue": "={{ $json.From }}",
-                    "rightValue": "money",
-                    "operator": {
-                      "type": "string",
-                      "operation": "contains"
-                    }
-                  }
-                ],
-                "combinator": "and"
               },
               "renameOutput": true,
-              "outputKey": "Test"
+              "outputKey": "Raptor"
             }
           ]
         },
@@ -192,8 +170,7 @@
             "type": "main",
             "index": 0
           }
-        ],
-        []
+        ]
       ]
     }
   },
@@ -203,12 +180,10 @@
   "staticData": {
     "node:Gmail Trigger": {
       "Gmail Trigger": {
-        "lastTimeChecked": 1770725385,
+        "lastTimeChecked": 1770815778,
         "possibleDuplicates": [
-          "19c477526eba6e0e",
-          "19c4773ff3418a81",
-          "19c4773aa1f640ac",
-          "19c4773a725db740"
+          "19c4cd872acf8abd",
+          "19c4c7f24bb02a7a"
         ]
       }
     }
@@ -217,8 +192,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "14dba2f5-ac82-4c45-b764-b196ca959505",
-  "activeVersionId": "14dba2f5-ac82-4c45-b764-b196ca959505",
+  "versionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
+  "activeVersionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
   "triggerCount": 1,
   "shared": [
     {
@@ -230,9 +205,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-10T07:45:04.000Z",
-    "createdAt": "2026-02-10T07:45:02.388Z",
-    "versionId": "14dba2f5-ac82-4c45-b764-b196ca959505",
+    "updatedAt": "2026-02-11T00:31:23.000Z",
+    "createdAt": "2026-02-11T00:31:18.028Z",
+    "versionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
     "workflowId": "JsXkXXD808mS6NVM",
     "nodes": [
       {
@@ -310,31 +285,9 @@
                     }
                   ],
                   "combinator": "and"
-                }
-              },
-              {
-                "conditions": {
-                  "options": {
-                    "caseSensitive": true,
-                    "leftValue": "",
-                    "typeValidation": "strict",
-                    "version": 2
-                  },
-                  "conditions": [
-                    {
-                      "id": "9a801bc8-8bee-447f-87c5-4cfc3e5bd6c1",
-                      "leftValue": "={{ $json.From }}",
-                      "rightValue": "money",
-                      "operator": {
-                        "type": "string",
-                        "operation": "contains"
-                      }
-                    }
-                  ],
-                  "combinator": "and"
                 },
                 "renameOutput": true,
-                "outputKey": "Test"
+                "outputKey": "Raptor"
               }
             ]
           },
@@ -421,13 +374,12 @@
               "type": "main",
               "index": 0
             }
-          ],
-          []
+          ]
         ]
       }
     },
     "authors": "Nicolas Bouème",
-    "name": "Version 14dba2f5",
+    "name": "Version dc719e5d",
     "description": "",
     "autosaved": true
   },
