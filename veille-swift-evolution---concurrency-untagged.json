@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-10T07:33:55.761Z",
+  "updatedAt": "2026-02-11T00:25:16.987Z",
   "createdAt": "2026-02-09T08:09:43.215Z",
   "id": "6y54DR1GjXbiJFFq",
   "name": "Veille Swift Evolution - Concurrency",
@@ -37,8 +37,7 @@
         "rule": {
           "interval": [
             {
-              "field": "cronExpression",
-              "expression": "30 8 * * *"
+              "triggerAtHour": 8
             }
           ]
         }
@@ -119,7 +118,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const response = $json.text || $json.response || $json.output || '';\nconst articleCount = $('Preparer prompt IA').first().json.articleCount;\nconst isRelevant = !response.trim().startsWith('AUCUN');\n\nif (!isRelevant) {\n  return [{ json: { message: '', isRelevant: false } }];\n}\n\nconst today = new Date().toLocaleDateString('fr-FR', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\nconst cleanResponse = response\n  .replace(/\\*\\*/g, '')\n  .replace(/\\*/g, '')\n  .replace(/_/g, '')\n  .replace(/`/g, '')\n  .replace(/#{1,6}\\s/g, '');\n\nlet message = `\\u26A1 Swift Evolution - ${today}\\n\\n` +\n  `${articleCount} source(s) analysee(s)\\n\\n` +\n  `${cleanResponse}`;\n\nif (message.length > 4000) {\n  message = message.substring(0, 4000) + '\\n\\n... (tronque)';\n}\n\nreturn [{ json: { message, isRelevant: true } }];"
+        "jsCode": "const response = $json.text || $json.response || $json.output || '';\nconst articleCount = $('Preparer prompt IA').first().json.articleCount;\n\n// Gerer les reponses vides OU commencant par AUCUN\nconst trimmed = response.trim();\nconst isRelevant = trimmed.length > 0 && !trimmed.startsWith('AUCUN');\n\nif (!isRelevant) {\n  return [{ json: { message: '', isRelevant: false } }];\n}\n\nconst today = new Date().toLocaleDateString('fr-FR', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\nconst cleanResponse = response\n  .replace(/\\*\\*/g, '')\n  .replace(/\\*/g, '')\n  .replace(/_/g, '')\n  .replace(/`/g, '')\n  .replace(/#{1,6}\\s/g, '');\n\nlet message = `\\u26A1 Swift Evolution - ${today}\\n\\n` +\n  `${articleCount} source(s) analysee(s)\\n\\n` +\n  `${cleanResponse}`;\n\nif (message.length > 4000) {\n  message = message.substring(0, 4000) + '\\n\\n... (tronque)';\n}\n\nreturn [{ json: { message, isRelevant: true } }];"
       },
       "id": "cea5438e-b8df-4c03-adc5-1d4e0865f58d",
       "name": "Formater message",
@@ -401,8 +400,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "5f8eb0bb-1a93-4f00-8bbe-e4f077829656",
-  "activeVersionId": "5f8eb0bb-1a93-4f00-8bbe-e4f077829656",
+  "versionId": "78321c81-60be-4761-9f61-1c058b4478b0",
+  "activeVersionId": "78321c81-60be-4761-9f61-1c058b4478b0",
   "triggerCount": 1,
   "shared": [
     {
@@ -414,9 +413,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-10T07:39:42.000Z",
-    "createdAt": "2026-02-10T07:32:13.174Z",
-    "versionId": "5f8eb0bb-1a93-4f00-8bbe-e4f077829656",
+    "updatedAt": "2026-02-11T00:30:17.000Z",
+    "createdAt": "2026-02-11T00:25:16.988Z",
+    "versionId": "78321c81-60be-4761-9f61-1c058b4478b0",
     "workflowId": "6y54DR1GjXbiJFFq",
     "nodes": [
       {
@@ -450,8 +449,7 @@
           "rule": {
             "interval": [
               {
-                "field": "cronExpression",
-                "expression": "30 8 * * *"
+                "triggerAtHour": 8
               }
             ]
           }
@@ -532,7 +530,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const response = $json.text || $json.response || $json.output || '';\nconst articleCount = $('Preparer prompt IA').first().json.articleCount;\nconst isRelevant = !response.trim().startsWith('AUCUN');\n\nif (!isRelevant) {\n  return [{ json: { message: '', isRelevant: false } }];\n}\n\nconst today = new Date().toLocaleDateString('fr-FR', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\nconst cleanResponse = response\n  .replace(/\\*\\*/g, '')\n  .replace(/\\*/g, '')\n  .replace(/_/g, '')\n  .replace(/`/g, '')\n  .replace(/#{1,6}\\s/g, '');\n\nlet message = `\\u26A1 Swift Evolution - ${today}\\n\\n` +\n  `${articleCount} source(s) analysee(s)\\n\\n` +\n  `${cleanResponse}`;\n\nif (message.length > 4000) {\n  message = message.substring(0, 4000) + '\\n\\n... (tronque)';\n}\n\nreturn [{ json: { message, isRelevant: true } }];"
+          "jsCode": "const response = $json.text || $json.response || $json.output || '';\nconst articleCount = $('Preparer prompt IA').first().json.articleCount;\n\n// Gerer les reponses vides OU commencant par AUCUN\nconst trimmed = response.trim();\nconst isRelevant = trimmed.length > 0 && !trimmed.startsWith('AUCUN');\n\nif (!isRelevant) {\n  return [{ json: { message: '', isRelevant: false } }];\n}\n\nconst today = new Date().toLocaleDateString('fr-FR', {\n  weekday: 'long',\n  year: 'numeric',\n  month: 'long',\n  day: 'numeric'\n});\n\nconst cleanResponse = response\n  .replace(/\\*\\*/g, '')\n  .replace(/\\*/g, '')\n  .replace(/_/g, '')\n  .replace(/`/g, '')\n  .replace(/#{1,6}\\s/g, '');\n\nlet message = `\\u26A1 Swift Evolution - ${today}\\n\\n` +\n  `${articleCount} source(s) analysee(s)\\n\\n` +\n  `${cleanResponse}`;\n\nif (message.length > 4000) {\n  message = message.substring(0, 4000) + '\\n\\n... (tronque)';\n}\n\nreturn [{ json: { message, isRelevant: true } }];"
         },
         "id": "cea5438e-b8df-4c03-adc5-1d4e0865f58d",
         "name": "Formater message",
@@ -803,7 +801,7 @@
       }
     },
     "authors": "Nicolas Bouème",
-    "name": "Version 5f8eb0bb",
+    "name": "Version 78321c81",
     "description": "",
     "autosaved": true
   },
