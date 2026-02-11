@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-10T07:40:03.965Z",
+  "updatedAt": "2026-02-11T00:30:30.161Z",
   "createdAt": "2026-01-29T04:57:12.988Z",
   "id": "xl2AbAtl0tlnfvTW",
   "name": "Veille Tech Swift/iOS - Résumé Quotidien",
@@ -113,28 +113,6 @@
         -816
       ],
       "webhookId": "501cba44-edb6-473c-bcf0-cfb7df26a7cd",
-      "credentials": {
-        "telegramApi": {
-          "id": "I5fyrVFVi31c1Y9u",
-          "name": "Telegram Swift News"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
-        "text": "📭 Veille Tech\n\nAucun nouvel article dans les dernières 24h.",
-        "additionalFields": {}
-      },
-      "id": "5f858d09-37bb-4660-baf3-42c797ccc231",
-      "name": "Telegram - Rien de neuf",
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        3280,
-        -592
-      ],
-      "webhookId": "bb807fc3-119d-4ea8-9ce0-f52a401e0829",
       "credentials": {
         "telegramApi": {
           "id": "I5fyrVFVi31c1Y9u",
@@ -305,13 +283,7 @@
             "index": 0
           }
         ],
-        [
-          {
-            "node": "Telegram - Rien de neuf",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Liste des flux RSS": {
@@ -422,8 +394,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "7511062a-6af3-482d-9c5a-d69f4840455b",
-  "activeVersionId": "7511062a-6af3-482d-9c5a-d69f4840455b",
+  "versionId": "1b805c2e-8434-4b07-81bf-364155694d54",
+  "activeVersionId": "1b805c2e-8434-4b07-81bf-364155694d54",
   "triggerCount": 1,
   "shared": [
     {
@@ -435,9 +407,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-10T07:44:41.000Z",
-    "createdAt": "2026-02-10T07:40:03.966Z",
-    "versionId": "7511062a-6af3-482d-9c5a-d69f4840455b",
+    "updatedAt": "2026-02-11T00:30:32.000Z",
+    "createdAt": "2026-02-11T00:30:30.162Z",
+    "versionId": "1b805c2e-8434-4b07-81bf-364155694d54",
     "workflowId": "xl2AbAtl0tlnfvTW",
     "nodes": [
       {
@@ -547,28 +519,6 @@
           -816
         ],
         "webhookId": "501cba44-edb6-473c-bcf0-cfb7df26a7cd",
-        "credentials": {
-          "telegramApi": {
-            "id": "I5fyrVFVi31c1Y9u",
-            "name": "Telegram Swift News"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
-          "text": "📭 Veille Tech\n\nAucun nouvel article dans les dernières 24h.",
-          "additionalFields": {}
-        },
-        "id": "5f858d09-37bb-4660-baf3-42c797ccc231",
-        "name": "Telegram - Rien de neuf",
-        "type": "n8n-nodes-base.telegram",
-        "typeVersion": 1.2,
-        "position": [
-          3280,
-          -592
-        ],
-        "webhookId": "bb807fc3-119d-4ea8-9ce0-f52a401e0829",
         "credentials": {
           "telegramApi": {
             "id": "I5fyrVFVi31c1Y9u",
@@ -739,13 +689,7 @@
               "index": 0
             }
           ],
-          [
-            {
-              "node": "Telegram - Rien de neuf",
-              "type": "main",
-              "index": 0
-            }
-          ]
+          []
         ]
       },
       "Liste des flux RSS": {
@@ -845,7 +789,7 @@
       }
     },
     "authors": "Nicolas Bouème",
-    "name": "Version 7511062a",
+    "name": "Version 1b805c2e",
     "description": "",
     "autosaved": true
   },
