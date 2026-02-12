@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-11T00:30:30.161Z",
+  "updatedAt": "2026-02-12T05:01:43.836Z",
   "createdAt": "2026-01-29T04:57:12.988Z",
   "id": "xl2AbAtl0tlnfvTW",
   "name": "Veille Tech Swift/iOS - Résumé Quotidien",
@@ -122,7 +122,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// 📝 Configure tes flux RSS ici\nconst rssFeeds = [\n  { name: \"Swift by Sundell\", url: \"https://www.swiftbysundell.com/rss\" },\n  { name: \"Hacking with Swift\", url: \"https://www.hackingwithswift.com/articles/rss\" },\n  { name: \"iOS Dev Weekly\", url: \"https://iosdevweekly.com/issues.rss\" },\n  { name: \"Donny Wals\", url: \"https://www.donnywals.com/feed/\" },\n  { name: \"SwiftLee\", url: \"https://www.avanderlee.com/feed/\" }\n];\n\nreturn rssFeeds.map(feed => ({ json: feed }));"
+        "jsCode": "// 📝 Configure tes flux RSS ici\nconst rssFeeds = [\n  { name: \"Swift by Sundell\", url: \"https://www.swiftbysundell.com/rss\" },\n  { name: \"Hacking with Swift\", url: \"https://www.hackingwithswift.com/articles/rss\" },\n  { name: \"iOS Dev Weekly\", url: \"https://iosdevweekly.com/issues.rss\" },\n  { name: \"Donny Wals\", url: \"https://www.donnywals.com/feed/\" },\n  { name: \"SwiftLee\", url: \"https://www.avanderlee.com/feed/\" },\n  { name: \"The Mobile Engineer\", url: \"https://newsletter.mobileengineer.io/feed\" },\n  { name: \"Sarunw\", url: \"https://sarunw.com/feed.xml\" },\n  { name: \"Quality Coding\", url: \"http://feeds.feedburner.com/qualitycoding\" },\n  { name: \"Point-Free Pointers\", url: \"https://www.pointfree.co/blog/feed/atom.xml\" },\n  { name: \"objc.io\", url: \"http://www.objc.io/feed.xml\" },\n  { name: \"Krzysztof Zabłocki\", url: \"https://merowing.info/rss.xml\" },\n  { name: \"Dave Verwer’s Blog\", url: \"https://daveverwer.com/feed.xml\" },\n  { name: \"Code and tools\", url: \"https://kill-the-newsletter.com/feeds/8wna5k2vcjskf9wc.xml\" },\n  { name: \"AppCoda\", url: \"http://feeds.feedburner.com/appcoda\" },\n  { name: \"Those Who Swift\", url: \"https://thosewhoswift.substack.com/feed\" },\n  { name: \"The Blog – Donny Wals\", url: \"https://www.donnywals.com/the-blog/feed/\" },\n  { name: \"Swift with Majid\", url: \"https://mecid.github.io/feed.xml\" }\n];\n\nreturn rssFeeds.map(feed => ({ json: feed }));"
       },
       "id": "68ddcf7b-448c-4b6d-8a68-805cdb8d380c",
       "name": "Liste des flux RSS",
@@ -394,8 +394,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "1b805c2e-8434-4b07-81bf-364155694d54",
-  "activeVersionId": "1b805c2e-8434-4b07-81bf-364155694d54",
+  "versionId": "71956e47-5c91-4ecc-ae12-b90bab531d19",
+  "activeVersionId": "71956e47-5c91-4ecc-ae12-b90bab531d19",
   "triggerCount": 1,
   "shared": [
     {
@@ -407,9 +407,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-11T00:30:32.000Z",
-    "createdAt": "2026-02-11T00:30:30.162Z",
-    "versionId": "1b805c2e-8434-4b07-81bf-364155694d54",
+    "updatedAt": "2026-02-12T05:02:04.000Z",
+    "createdAt": "2026-02-12T05:01:43.837Z",
+    "versionId": "71956e47-5c91-4ecc-ae12-b90bab531d19",
     "workflowId": "xl2AbAtl0tlnfvTW",
     "nodes": [
       {
@@ -528,7 +528,7 @@
       },
       {
         "parameters": {
-          "jsCode": "// 📝 Configure tes flux RSS ici\nconst rssFeeds = [\n  { name: \"Swift by Sundell\", url: \"https://www.swiftbysundell.com/rss\" },\n  { name: \"Hacking with Swift\", url: \"https://www.hackingwithswift.com/articles/rss\" },\n  { name: \"iOS Dev Weekly\", url: \"https://iosdevweekly.com/issues.rss\" },\n  { name: \"Donny Wals\", url: \"https://www.donnywals.com/feed/\" },\n  { name: \"SwiftLee\", url: \"https://www.avanderlee.com/feed/\" }\n];\n\nreturn rssFeeds.map(feed => ({ json: feed }));"
+          "jsCode": "// 📝 Configure tes flux RSS ici\nconst rssFeeds = [\n  { name: \"Swift by Sundell\", url: \"https://www.swiftbysundell.com/rss\" },\n  { name: \"Hacking with Swift\", url: \"https://www.hackingwithswift.com/articles/rss\" },\n  { name: \"iOS Dev Weekly\", url: \"https://iosdevweekly.com/issues.rss\" },\n  { name: \"Donny Wals\", url: \"https://www.donnywals.com/feed/\" },\n  { name: \"SwiftLee\", url: \"https://www.avanderlee.com/feed/\" },\n  { name: \"The Mobile Engineer\", url: \"https://newsletter.mobileengineer.io/feed\" },\n  { name: \"Sarunw\", url: \"https://sarunw.com/feed.xml\" },\n  { name: \"Quality Coding\", url: \"http://feeds.feedburner.com/qualitycoding\" },\n  { name: \"Point-Free Pointers\", url: \"https://www.pointfree.co/blog/feed/atom.xml\" },\n  { name: \"objc.io\", url: \"http://www.objc.io/feed.xml\" },\n  { name: \"Krzysztof Zabłocki\", url: \"https://merowing.info/rss.xml\" },\n  { name: \"Dave Verwer’s Blog\", url: \"https://daveverwer.com/feed.xml\" },\n  { name: \"Code and tools\", url: \"https://kill-the-newsletter.com/feeds/8wna5k2vcjskf9wc.xml\" },\n  { name: \"AppCoda\", url: \"http://feeds.feedburner.com/appcoda\" },\n  { name: \"Those Who Swift\", url: \"https://thosewhoswift.substack.com/feed\" },\n  { name: \"The Blog – Donny Wals\", url: \"https://www.donnywals.com/the-blog/feed/\" },\n  { name: \"Swift with Majid\", url: \"https://mecid.github.io/feed.xml\" }\n];\n\nreturn rssFeeds.map(feed => ({ json: feed }));"
         },
         "id": "68ddcf7b-448c-4b6d-8a68-805cdb8d380c",
         "name": "Liste des flux RSS",
@@ -789,7 +789,7 @@
       }
     },
     "authors": "Nicolas Bouème",
-    "name": "Version 1b805c2e",
+    "name": "Version 71956e47",
     "description": "",
     "autosaved": true
   },
