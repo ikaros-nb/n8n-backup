@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-02-19T23:07:34.411Z",
+  "updatedAt": "2026-02-26T04:45:59.969Z",
   "createdAt": "2026-01-29T04:57:12.988Z",
   "id": "xl2AbAtl0tlnfvTW",
   "name": "Veille Tech Swift/iOS - Résumé Quotidien",
@@ -168,7 +168,8 @@
         "rule": {
           "interval": [
             {
-              "triggerAtHour": 8
+              "triggerAtHour": 8,
+              "triggerAtMinute": 2
             }
           ]
         }
@@ -395,8 +396,8 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "7785d942-b087-4fc1-9452-f9f62aaa6abb",
-  "activeVersionId": "7785d942-b087-4fc1-9452-f9f62aaa6abb",
+  "versionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
+  "activeVersionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
   "triggerCount": 1,
   "shared": [
     {
@@ -408,9 +409,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-19T23:08:01.000Z",
-    "createdAt": "2026-02-19T23:07:34.412Z",
-    "versionId": "7785d942-b087-4fc1-9452-f9f62aaa6abb",
+    "updatedAt": "2026-02-26T04:46:07.000Z",
+    "createdAt": "2026-02-26T04:45:59.970Z",
+    "versionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
     "workflowId": "xl2AbAtl0tlnfvTW",
     "nodes": [
       {
@@ -575,7 +576,8 @@
           "rule": {
             "interval": [
               {
-                "triggerAtHour": 8
+                "triggerAtHour": 8,
+                "triggerAtMinute": 2
               }
             ]
           }
@@ -791,7 +793,7 @@
       }
     },
     "authors": "Nicolas Bouème",
-    "name": "Version 7785d942",
+    "name": "Version e1096db7",
     "description": "",
     "autosaved": true
   },
