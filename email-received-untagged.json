@@ -180,10 +180,9 @@
   "staticData": {
     "node:Gmail Trigger": {
       "Gmail Trigger": {
-        "lastTimeChecked": 1775565185,
+        "lastTimeChecked": 1775654051,
         "possibleDuplicates": [
-          "19d67eea85534383",
-          "19d67dcde4ac825d"
+          "19d6d3aa0d187066"
         ]
       }
     }
