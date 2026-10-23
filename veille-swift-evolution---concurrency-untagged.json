@@ -1,10 +1,13 @@
 {
-  "updatedAt": "2026-02-11T00:25:16.987Z",
-  "createdAt": "2026-02-09T08:09:43.215Z",
   "id": "6y54DR1GjXbiJFFq",
   "name": "Veille Swift Evolution - Concurrency",
   "active": true,
+  "activeVersionId": "78321c81-60be-4761-9f61-1c058b4478b0",
+  "createdAt": "2026-02-09T08:09:43.215Z",
+  "updatedAt": "2026-02-11T00:25:16.987Z",
   "isArchived": false,
+  "versionId": "78321c81-60be-4761-9f61-1c058b4478b0",
+  "triggerCount": 1,
   "nodes": [
     {
       "parameters": {
@@ -388,33 +391,35 @@
       ]
     }
   },
+  "nodeGroups": [],
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": {
     "node:Tous les jours 8h": {
-      "recurrenceRules": []
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
     }
   },
+  "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "78321c81-60be-4761-9f61-1c058b4478b0",
-  "activeVersionId": "78321c81-60be-4761-9f61-1c058b4478b0",
-  "triggerCount": 1,
+  "tags": [],
   "shared": [
     {
-      "updatedAt": "2026-02-09T08:09:43.220Z",
-      "createdAt": "2026-02-09T08:09:43.220Z",
       "role": "workflow:owner",
       "workflowId": "6y54DR1GjXbiJFFq",
-      "projectId": "WSxBDzriJIujErMI"
+      "projectId": "WSxBDzriJIujErMI",
+      "createdAt": "2026-02-09T08:09:43.220Z",
+      "updatedAt": "2026-02-09T08:09:43.220Z"
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-11T00:30:17.000Z",
-    "createdAt": "2026-02-11T00:25:16.988Z",
     "versionId": "78321c81-60be-4761-9f61-1c058b4478b0",
     "workflowId": "6y54DR1GjXbiJFFq",
     "nodes": [
@@ -800,10 +805,12 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "Nicolas Bouème",
     "name": "Version 78321c81",
     "description": "",
-    "autosaved": true
-  },
-  "tags": []
+    "autosaved": true,
+    "createdAt": "2026-02-11T00:25:16.988Z",
+    "updatedAt": "2026-02-11T00:30:17.000Z"
+  }
 }
