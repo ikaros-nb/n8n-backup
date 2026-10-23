@@ -1,10 +1,13 @@
 {
-  "updatedAt": "2026-02-10T08:04:00.673Z",
-  "createdAt": "2025-11-27T06:18:20.131Z",
   "id": "QPSW2VyrRSeQ59Ly",
   "name": "Automated daily workflow backup to GitHub",
   "active": true,
+  "activeVersionId": "814f52fc-75e1-4651-9643-28a1400873cd",
+  "createdAt": "2025-11-27T06:18:20.131Z",
+  "updatedAt": "2026-02-10T08:04:00.673Z",
   "isArchived": false,
+  "versionId": "814f52fc-75e1-4651-9643-28a1400873cd",
+  "triggerCount": 1,
   "nodes": [
     {
       "parameters": {
@@ -396,33 +399,35 @@
       ]
     }
   },
+  "nodeGroups": [],
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": {
     "node:Schedule Trigger": {
-      "recurrenceRules": []
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
     }
   },
+  "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "814f52fc-75e1-4651-9643-28a1400873cd",
-  "activeVersionId": "814f52fc-75e1-4651-9643-28a1400873cd",
-  "triggerCount": 1,
+  "tags": [],
   "shared": [
     {
-      "updatedAt": "2025-11-27T06:18:20.133Z",
-      "createdAt": "2025-11-27T06:18:20.133Z",
       "role": "workflow:owner",
       "workflowId": "QPSW2VyrRSeQ59Ly",
-      "projectId": "WSxBDzriJIujErMI"
+      "projectId": "WSxBDzriJIujErMI",
+      "createdAt": "2025-11-27T06:18:20.133Z",
+      "updatedAt": "2025-11-27T06:18:20.133Z"
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-10T08:04:35.000Z",
-    "createdAt": "2026-02-10T08:04:00.674Z",
     "versionId": "814f52fc-75e1-4651-9643-28a1400873cd",
     "workflowId": "QPSW2VyrRSeQ59Ly",
     "nodes": [
@@ -816,10 +821,12 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "Nicolas Bouème",
     "name": "Version 814f52fc",
     "description": "",
-    "autosaved": true
-  },
-  "tags": []
+    "autosaved": true,
+    "createdAt": "2026-02-10T08:04:00.674Z",
+    "updatedAt": "2026-02-10T08:04:35.000Z"
+  }
 }
