@@ -1,10 +1,13 @@
 {
-  "updatedAt": "2026-02-26T04:45:59.969Z",
-  "createdAt": "2026-01-29T04:57:12.988Z",
   "id": "xl2AbAtl0tlnfvTW",
   "name": "Veille Tech Swift/iOS - Résumé Quotidien",
   "active": true,
+  "activeVersionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
+  "createdAt": "2026-01-29T04:57:12.988Z",
+  "updatedAt": "2026-02-26T04:45:59.969Z",
   "isArchived": false,
+  "versionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
+  "triggerCount": 1,
   "nodes": [
     {
       "parameters": {
@@ -384,33 +387,35 @@
       ]
     }
   },
+  "nodeGroups": [],
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": {
     "node:Tous les jours à 8h": {
-      "recurrenceRules": []
+      "recurrenceRules": [
+        null
+      ],
+      "recurrenceRuleSignatures": [
+        null
+      ]
     }
   },
+  "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
-  "activeVersionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
-  "triggerCount": 1,
+  "tags": [],
   "shared": [
     {
-      "updatedAt": "2026-01-29T04:57:12.994Z",
-      "createdAt": "2026-01-29T04:57:12.994Z",
       "role": "workflow:owner",
       "workflowId": "xl2AbAtl0tlnfvTW",
-      "projectId": "WSxBDzriJIujErMI"
+      "projectId": "WSxBDzriJIujErMI",
+      "createdAt": "2026-01-29T04:57:12.994Z",
+      "updatedAt": "2026-01-29T04:57:12.994Z"
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-26T04:46:07.000Z",
-    "createdAt": "2026-02-26T04:45:59.970Z",
     "versionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
     "workflowId": "xl2AbAtl0tlnfvTW",
     "nodes": [
@@ -792,10 +797,12 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "Nicolas Bouème",
     "name": "Version e1096db7",
     "description": "",
-    "autosaved": true
-  },
-  "tags": []
+    "autosaved": true,
+    "createdAt": "2026-02-26T04:45:59.970Z",
+    "updatedAt": "2026-02-26T04:46:07.000Z"
+  }
 }
