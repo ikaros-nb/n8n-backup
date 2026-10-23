@@ -1,10 +1,13 @@
 {
-  "updatedAt": "2026-02-11T00:31:18.028Z",
-  "createdAt": "2025-11-27T05:54:56.840Z",
   "id": "JsXkXXD808mS6NVM",
   "name": "Email received",
   "active": true,
+  "activeVersionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
+  "createdAt": "2025-11-27T05:54:56.840Z",
+  "updatedAt": "2026-02-11T00:31:18.028Z",
   "isArchived": false,
+  "versionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
+  "triggerCount": 1,
   "nodes": [
     {
       "parameters": {
@@ -174,40 +177,38 @@
       ]
     }
   },
+  "nodeGroups": [],
   "settings": {
     "executionOrder": "v1"
   },
   "staticData": {
     "node:Gmail Trigger": {
       "Gmail Trigger": {
-        "lastTimeChecked": 1792673134,
+        "lastTimeChecked": 1792757458,
         "possibleDuplicates": [
-          "1a163a537a0ef117",
-          "1a1639ba3ada8507",
-          "1a1638bbd8edb642"
+          "1a168abe6703c8fb",
+          "1a168aad95cacf64",
+          "1a168a9bb0ab1783",
+          "1a168a9798146ff8"
         ]
       }
     }
   },
+  "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "pinData": {},
-  "versionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
-  "activeVersionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
-  "triggerCount": 1,
+  "tags": [],
   "shared": [
     {
-      "updatedAt": "2025-11-27T05:54:56.845Z",
-      "createdAt": "2025-11-27T05:54:56.845Z",
       "role": "workflow:owner",
       "workflowId": "JsXkXXD808mS6NVM",
-      "projectId": "WSxBDzriJIujErMI"
+      "projectId": "WSxBDzriJIujErMI",
+      "createdAt": "2025-11-27T05:54:56.845Z",
+      "updatedAt": "2025-11-27T05:54:56.845Z"
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-02-11T00:31:23.000Z",
-    "createdAt": "2026-02-11T00:31:18.028Z",
     "versionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
     "workflowId": "JsXkXXD808mS6NVM",
     "nodes": [
@@ -379,10 +380,12 @@
         ]
       }
     },
+    "nodeGroups": [],
     "authors": "Nicolas Bouème",
     "name": "Version dc719e5d",
     "description": "",
-    "autosaved": true
-  },
-  "tags": []
+    "autosaved": true,
+    "createdAt": "2026-02-11T00:31:18.028Z",
+    "updatedAt": "2026-02-11T00:31:23.000Z"
+  }
 }
