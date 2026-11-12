@@ -2,11 +2,11 @@
   "id": "xl2AbAtl0tlnfvTW",
   "name": "Veille Tech Swift/iOS - Résumé Quotidien",
   "active": true,
-  "activeVersionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
+  "activeVersionId": "c897bca8-1a8f-482d-b96f-77c49bc64439",
   "createdAt": "2026-01-29T04:57:12.988Z",
-  "updatedAt": "2026-02-26T04:45:59.969Z",
+  "updatedAt": "2026-11-11T08:25:52.189Z",
   "isArchived": false,
-  "versionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
+  "versionId": "c897bca8-1a8f-482d-b96f-77c49bc64439",
   "triggerCount": 1,
   "nodes": [
     {
@@ -172,7 +172,7 @@
           "interval": [
             {
               "triggerAtHour": 8,
-              "triggerAtMinute": 2
+              "triggerAtMinute": 5
             }
           ]
         }
@@ -237,7 +237,8 @@
         "responsesApiEnabled": false,
         "options": {
           "maxTokens": 2000,
-          "temperature": 0.7
+          "temperature": 0.7,
+          "maxRetries": 3
         }
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
@@ -389,7 +390,8 @@
   },
   "nodeGroups": [],
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Tous les jours à 8h": {
@@ -416,7 +418,7 @@
     }
   ],
   "activeVersion": {
-    "versionId": "e1096db7-f750-49a1-ae8e-ffb7a5a98cff",
+    "versionId": "c897bca8-1a8f-482d-b96f-77c49bc64439",
     "workflowId": "xl2AbAtl0tlnfvTW",
     "nodes": [
       {
@@ -582,7 +584,7 @@
             "interval": [
               {
                 "triggerAtHour": 8,
-                "triggerAtMinute": 2
+                "triggerAtMinute": 5
               }
             ]
           }
@@ -647,7 +649,8 @@
           "responsesApiEnabled": false,
           "options": {
             "maxTokens": 2000,
-            "temperature": 0.7
+            "temperature": 0.7,
+            "maxRetries": 3
           }
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
@@ -799,10 +802,10 @@
     },
     "nodeGroups": [],
     "authors": "Nicolas Bouème",
-    "name": "Version e1096db7",
+    "name": "Version c897bca8",
     "description": "",
     "autosaved": true,
-    "createdAt": "2026-02-26T04:45:59.970Z",
-    "updatedAt": "2026-02-26T04:46:07.000Z"
+    "createdAt": "2026-11-11T08:25:52.192Z",
+    "updatedAt": "2026-11-11T08:25:56.000Z"
   }
 }
