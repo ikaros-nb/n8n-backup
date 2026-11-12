@@ -2,11 +2,11 @@
   "id": "6y54DR1GjXbiJFFq",
   "name": "Veille Swift Evolution - Concurrency",
   "active": true,
-  "activeVersionId": "78321c81-60be-4761-9f61-1c058b4478b0",
+  "activeVersionId": "2b2ea189-e7d9-433e-90c3-49a0418b4003",
   "createdAt": "2026-02-09T08:09:43.215Z",
-  "updatedAt": "2026-02-11T00:25:16.987Z",
+  "updatedAt": "2026-11-11T08:24:32.286Z",
   "isArchived": false,
-  "versionId": "78321c81-60be-4761-9f61-1c058b4478b0",
+  "versionId": "2b2ea189-e7d9-433e-90c3-49a0418b4003",
   "triggerCount": 1,
   "nodes": [
     {
@@ -60,7 +60,8 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "strict",
+            "version": 1
           },
           "conditions": [
             {
@@ -231,7 +232,8 @@
         },
         "options": {
           "maxTokens": 4000,
-          "temperature": 0.3
+          "temperature": 0.3,
+          "maxRetries": 3
         }
       },
       "id": "1482ebb4-6644-4ba7-80cd-bca70012dcd1",
@@ -393,7 +395,8 @@
   },
   "nodeGroups": [],
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Tous les jours 8h": {
@@ -420,7 +423,7 @@
     }
   ],
   "activeVersion": {
-    "versionId": "78321c81-60be-4761-9f61-1c058b4478b0",
+    "versionId": "2b2ea189-e7d9-433e-90c3-49a0418b4003",
     "workflowId": "6y54DR1GjXbiJFFq",
     "nodes": [
       {
@@ -474,7 +477,8 @@
             "options": {
               "caseSensitive": true,
               "leftValue": "",
-              "typeValidation": "strict"
+              "typeValidation": "strict",
+              "version": 1
             },
             "conditions": [
               {
@@ -645,7 +649,8 @@
           },
           "options": {
             "maxTokens": 4000,
-            "temperature": 0.3
+            "temperature": 0.3,
+            "maxRetries": 3
           }
         },
         "id": "1482ebb4-6644-4ba7-80cd-bca70012dcd1",
@@ -807,10 +812,10 @@
     },
     "nodeGroups": [],
     "authors": "Nicolas Bouème",
-    "name": "Version 78321c81",
+    "name": "Version 2b2ea189",
     "description": "",
     "autosaved": true,
-    "createdAt": "2026-02-11T00:25:16.988Z",
-    "updatedAt": "2026-02-11T00:30:17.000Z"
+    "createdAt": "2026-11-11T08:24:32.287Z",
+    "updatedAt": "2026-11-11T08:24:34.000Z"
   }
 }
