@@ -2,40 +2,13 @@
   "id": "JsXkXXD808mS6NVM",
   "name": "Email received",
   "active": true,
-  "activeVersionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
+  "activeVersionId": "60754f24-0431-427a-ae32-c32dba014415",
   "createdAt": "2025-11-27T05:54:56.840Z",
-  "updatedAt": "2026-02-11T00:31:18.028Z",
+  "updatedAt": "2026-11-11T08:13:07.747Z",
   "isArchived": false,
-  "versionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
+  "versionId": "60754f24-0431-427a-ae32-c32dba014415",
   "triggerCount": 1,
   "nodes": [
-    {
-      "parameters": {
-        "pollTimes": {
-          "item": [
-            {
-              "mode": "everyX",
-              "value": 1
-            }
-          ]
-        },
-        "filters": {}
-      },
-      "type": "n8n-nodes-base.gmailTrigger",
-      "typeVersion": 1.3,
-      "position": [
-        0,
-        0
-      ],
-      "id": "70a332d4-cd8a-4058-a282-5e1d4322181b",
-      "name": "Gmail Trigger",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "CZHyJwjgAh19A92R",
-          "name": "Gmail account"
-        }
-      }
-    },
     {
       "parameters": {
         "rules": {
@@ -144,20 +117,36 @@
           "name": "Telegram Le Messager"
         }
       }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "maxResults": 1,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -32,
+        0
+      ],
+      "id": "2bd7836c-3e30-476a-bb1a-fa93aef34069",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CZHyJwjgAh19A92R",
+          "name": "Gmail account"
+        }
+      }
     }
   ],
   "connections": {
-    "Gmail Trigger": {
-      "main": [
-        [
-          {
-            "node": "Switch",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Switch": {
       "main": [
         [
@@ -175,19 +164,35 @@
           }
         ]
       ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "nodeGroups": [],
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate"
   },
   "staticData": {
     "node:Gmail Trigger": {
       "Gmail Trigger": {
-        "lastTimeChecked": 1794314475,
+        "lastTimeChecked": 1794491196,
         "possibleDuplicates": [
-          "1a1c57a160089ea1"
-        ]
+          "1a1d002abe16f0ff"
+        ],
+        "pendingMessageIds": [
+          "1a1cffd1d8ad0643"
+        ],
+        "noProgressTicks": 0
       }
     }
   },
@@ -206,36 +211,9 @@
     }
   ],
   "activeVersion": {
-    "versionId": "dc719e5d-d61c-40f9-bb84-bce0724ab77c",
+    "versionId": "60754f24-0431-427a-ae32-c32dba014415",
     "workflowId": "JsXkXXD808mS6NVM",
     "nodes": [
-      {
-        "parameters": {
-          "pollTimes": {
-            "item": [
-              {
-                "mode": "everyX",
-                "value": 1
-              }
-            ]
-          },
-          "filters": {}
-        },
-        "type": "n8n-nodes-base.gmailTrigger",
-        "typeVersion": 1.3,
-        "position": [
-          0,
-          0
-        ],
-        "id": "70a332d4-cd8a-4058-a282-5e1d4322181b",
-        "name": "Gmail Trigger",
-        "credentials": {
-          "gmailOAuth2": {
-            "id": "CZHyJwjgAh19A92R",
-            "name": "Gmail account"
-          }
-        }
-      },
       {
         "parameters": {
           "rules": {
@@ -344,20 +322,36 @@
             "name": "Telegram Le Messager"
           }
         }
+      },
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyHour"
+              }
+            ]
+          },
+          "maxResults": 1,
+          "filters": {}
+        },
+        "type": "n8n-nodes-base.gmailTrigger",
+        "typeVersion": 1.4,
+        "position": [
+          -32,
+          0
+        ],
+        "id": "2bd7836c-3e30-476a-bb1a-fa93aef34069",
+        "name": "Gmail Trigger",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "CZHyJwjgAh19A92R",
+            "name": "Gmail account"
+          }
+        }
       }
     ],
     "connections": {
-      "Gmail Trigger": {
-        "main": [
-          [
-            {
-              "node": "Switch",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Switch": {
         "main": [
           [
@@ -375,14 +369,25 @@
             }
           ]
         ]
+      },
+      "Gmail Trigger": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
     "authors": "Nicolas Bouème",
-    "name": "Version dc719e5d",
+    "name": "Version 60754f24",
     "description": "",
     "autosaved": true,
-    "createdAt": "2026-02-11T00:31:18.028Z",
-    "updatedAt": "2026-02-11T00:31:23.000Z"
+    "createdAt": "2026-11-11T08:13:07.748Z",
+    "updatedAt": "2026-11-11T08:13:13.000Z"
   }
 }
