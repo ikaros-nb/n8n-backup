@@ -185,23 +185,12 @@
   "staticData": {
     "node:Gmail Trigger": {
       "Gmail Trigger": {
-        "lastTimeChecked": 1794553169,
+        "lastTimeChecked": 1794606425,
         "possibleDuplicates": [
-          "1a1d3b44891d0649",
-          "1a1d3ac8e0983247",
-          "1a1d3ab9dd3f7044",
-          "1a1d3ab5a8e71c73",
-          "1a1d3ab4824949c8",
-          "1a1d3ab45ec5f05c",
-          "1a1d3a8356dfe1d9",
-          "1a1d3a7d6d970fa0"
+          "1a1d6e0eaeff3e62",
+          "1a1d768a98719f41"
         ],
-        "pendingMessageIds": [
-          "1a1d3a73327cd64d",
-          "1a1d3a6f0713c58d",
-          "1a1d3a6e5d3de497",
-          "1a1d3a6da8f3c292"
-        ],
+        "pendingMessageIds": [],
         "noProgressTicks": 0
       }
     }
