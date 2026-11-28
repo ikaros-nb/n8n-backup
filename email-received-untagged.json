@@ -185,51 +185,95 @@
   "staticData": {
     "node:Gmail Trigger": {
       "Gmail Trigger": {
-        "lastTimeChecked": 1795733455,
+        "lastTimeChecked": 1795852932,
         "possibleDuplicates": [
-          "1a21a0e026a02f92",
-          "1a21a0c06ba7a223",
-          "1a21a0c01cc2dc44",
-          "1a219fac649c17b4",
-          "1a219fa7a62fe94a",
-          "1a21aec1eb7e0c98",
-          "1a21aec15f63f9be",
-          "1a21aeb236cdb9e4",
-          "1a21aeb19fa451b9",
-          "1a21aeb18e2fc139"
+          "1a2212d1b222fdaa"
         ],
-        "pendingMessageIds": [
-          "1a21aeaa454b552d",
-          "1a21aea9ab3cb9a3",
-          "1a21ae9ea8fc8ed0",
-          "1a21ae9d0e349154",
-          "1a21ae9a426b90db",
-          "1a21ae9a33dc62eb",
-          "1a21ae9916adf16f",
-          "1a21ae98f307d6f6",
-          "1a21ae92df6db9e4",
-          "1a21ae8f95240681",
-          "1a21ae6175d55810",
-          "1a21ae59d6e1e674",
-          "1a21adebbb0d0baa",
-          "1a21ade65d57edf7",
-          "1a21ad4c559ff998",
-          "1a21ad38674ff998",
-          "1a21ad0b1b428a3b",
-          "1a21ad0945da1542"
-        ],
+        "pendingMessageIds": [],
         "noProgressTicks": 0,
         "failedFetches": [
           [
-            "1a21705101535871",
-            7
+            "1a21adebbb0d0baa",
+            1
           ],
           [
-            "1a217052572ea52a",
-            8
+            "1a21ae9916adf16f",
+            2
+          ],
+          [
+            "1a21ade65d57edf7",
+            1
+          ],
+          [
+            "1a21ae9ea8fc8ed0",
+            3
+          ],
+          [
+            "1a21ad4c559ff998",
+            1
+          ],
+          [
+            "1a21ae98f307d6f6",
+            2
+          ],
+          [
+            "1a21ad38674ff998",
+            1
+          ],
+          [
+            "1a21aeaa454b552d",
+            4
+          ],
+          [
+            "1a21ad0b1b428a3b",
+            1
+          ],
+          [
+            "1a21ae92df6db9e4",
+            2
+          ],
+          [
+            "1a21ad0945da1542",
+            1
+          ],
+          [
+            "1a21ae9d0e349154",
+            3
+          ],
+          [
+            "1a21ae8f95240681",
+            2
+          ],
+          [
+            "1a21ae9a426b90db",
+            3
+          ],
+          [
+            "1a21ae6175d55810",
+            2
+          ],
+          [
+            "1a21aea9ab3cb9a3",
+            4
+          ],
+          [
+            "1a21ae59d6e1e674",
+            2
+          ],
+          [
+            "1a21ae9a33dc62eb",
+            3
           ],
           [
             "1a2170c48d959524",
+            10
+          ],
+          [
+            "1a217052572ea52a",
+            10
+          ],
+          [
+            "1a21705101535871",
             10
           ]
         ]
